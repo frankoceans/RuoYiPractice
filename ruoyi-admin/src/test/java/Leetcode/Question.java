@@ -3,8 +3,10 @@ package Leetcode;
 import org.junit.Test;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 
+import java.util.*;
+
 @JsonTest
-public class LeetcodeT150 {
+public class Question {
     /**
      * 合并两个有序数组
      * 标签：从后向前数组遍历
@@ -55,7 +57,7 @@ public class LeetcodeT150 {
     public void t27() {
         int[] nums1 = {1, 2, 3, 0, 0, 0};
         int[] nums2 = {2, 5, 6};
-        Solution.removeElement(nums1, 3);
+        int i = Solution.removeElement(nums1, 3);
     }
 
     /**
@@ -66,6 +68,35 @@ public class LeetcodeT150 {
         // n=10
         int[] nums = {10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         System.out.println(Solution.findDuplicate(nums));
+    }
+
+    /**
+     * 423. 从英文中重建数学
+     * 给你一个字符串 s ，其中包含字母顺序打乱的用英文单词表示的若干数字（0-9）。按 升序 返回原始的数字。
+     * 0-zero 1-one 2-two 3-three 4-four 5-five 6-six 7-seven 8-eight 9-nine
+     * 特定含有的字符
+     * 0-z  2-w 4-u 6-x 8-g
+     */
+    @Test
+    public void t423() {
+        String s = "owoztneoerone";
+        // s = "zeroonetwothreefourfivesixseveneightnine";
+        // Map<Character, Integer> map = new HashMap<>();
+        // for (char c : ex.toCharArray()) {
+        //     if (map.containsKey(c)) {
+        //         map.put(c, map.get(c) + 1);
+        //     } else {
+        //         map.put(c, 1);
+        //     }
+        // }
+        // System.out.println(map);
+        // map.forEach((key, val) -> {
+        //     if (val == 1){
+        //         System.out.println(key);
+        //     }
+        // });
+        // String s = "fviefuro";
+        System.out.println(Solution.originalDigits(s));
     }
 }
 
@@ -125,6 +156,41 @@ class Solution {
             pre2 = nums[pre2];
         }
         return pre1;
+    }
+
+    public static String originalDigits(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+
+        int[] cnt = new int[10];
+        // 0-z  2-w 4-u 6-x 8-g
+        cnt[0] = map.getOrDefault('z', 0);
+        cnt[2] = map.getOrDefault('w', 0);
+        cnt[4] = map.getOrDefault('u', 0);
+        cnt[6] = map.getOrDefault('x', 0);
+        cnt[8] = map.getOrDefault('g', 0);
+
+        // 5={f-4} 3={h-8} 7={s-6}
+        cnt[5] = map.getOrDefault('f', 0) - cnt[4];
+        cnt[3] = map.getOrDefault('h', 0) - cnt[8];
+        cnt[7] = map.getOrDefault('s', 0) - cnt[6];
+
+        // 还有1 9    1={o-0-2-4}或{n-7-9}  9 = {n-1-7}或{i-1-6-8}
+        cnt[1] = map.getOrDefault('o', 0) - cnt[0] - cnt[2] - cnt[4];
+        cnt[9] = map.getOrDefault('n', 0) - cnt[1] - cnt[7];
+
+        StringBuffer ans = new StringBuffer();
+        for (int i = 0; i < cnt.length; i++) {
+            // System.out.println(i + " " + cnt[i]);
+            char c = (char) (i+48);
+            for (int j = 0; j < cnt[i]; j++) {
+                ans.append(c);
+            }
+        }
+        return ans.toString();
     }
 }
 
