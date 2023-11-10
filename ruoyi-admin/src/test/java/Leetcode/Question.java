@@ -79,7 +79,7 @@ public class Question {
      */
     @Test
     public void t423() {
-        String s = "owoztneoerone";
+        String s = "nnei";
         // s = "zeroonetwothreefourfivesixseveneightnine";
         // Map<Character, Integer> map = new HashMap<>();
         // for (char c : ex.toCharArray()) {
@@ -165,6 +165,7 @@ class Solution {
             map.put(c, map.getOrDefault(c, 0) + 1);
         }
 
+        // 0-zero 1-one 2-two 3-three 4-four 5-five 6-six 7-seven 8-eight 9-nine
         int[] cnt = new int[10];
         // 0-z  2-w 4-u 6-x 8-g
         cnt[0] = map.getOrDefault('z', 0);
@@ -178,14 +179,16 @@ class Solution {
         cnt[3] = map.getOrDefault('h', 0) - cnt[8];
         cnt[7] = map.getOrDefault('s', 0) - cnt[6];
 
-        // 还有1 9    1={o-0-2-4}或{n-7-9}  9 = {n-1-7}或{i-1-6-8}
+        // 还有1 9    1={o-0-2-4}  9 = {i-5-6-8} 不要用n 因为9存在两个n，得除2，增加了计算量
+        // cnt[9] = map.getOrDefault('i', 0) - cnt[1] - cnt[6] - cnt[9];
+        // cnt[1] = map.getOrDefault('n', 0) - cnt[7] - cnt[9] * 2;
         cnt[1] = map.getOrDefault('o', 0) - cnt[0] - cnt[2] - cnt[4];
-        cnt[9] = map.getOrDefault('n', 0) - cnt[1] - cnt[7];
+        cnt[9] = map.getOrDefault('i', 0) - cnt[5] - cnt[6] - cnt[8];
 
         StringBuilder ans = new StringBuilder();
         for (int i = 0; i < cnt.length; i++) {
             // System.out.println(i + " " + cnt[i]);
-            char c = (char) (i+48);
+            char c = (char) (i + 48);
             for (int j = 0; j < cnt[i]; j++) {
                 ans.append(c);
             }
