@@ -182,7 +182,7 @@ class Solution {
         cnt[1] = map.getOrDefault('o', 0) - cnt[0] - cnt[2] - cnt[4];
         cnt[9] = map.getOrDefault('n', 0) - cnt[1] - cnt[7];
 
-        StringBuffer ans = new StringBuffer();
+        StringBuilder ans = new StringBuilder();
         for (int i = 0; i < cnt.length; i++) {
             // System.out.println(i + " " + cnt[i]);
             char c = (char) (i+48);
